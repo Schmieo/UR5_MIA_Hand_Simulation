@@ -85,17 +85,15 @@ def generate_launch_description():
             description="Type/series of used UR robot.",
             choices=[
                 "ur3",
-                "ur5",
-                "ur10",
                 "ur3e",
+                "ur5",
                 "ur5e",
                 "ur7e",
+                "ur10",
                 "ur10e",
                 "ur12e",
                 "ur16e",
-                "ur8long",
                 "ur15",
-                "ur18",
                 "ur20",
                 "ur30",
             ],
@@ -133,7 +131,7 @@ def generate_launch_description():
             "moveit_launch_file",
             default_value=PathJoinSubstitution(
                 [
-                    FindPackageShare("ur_moveit_config"),
+                    FindPackageShare("ur5_mia_moveit_config"),
                     "launch",
                     "ur_moveit.launch.py",
                 ]
