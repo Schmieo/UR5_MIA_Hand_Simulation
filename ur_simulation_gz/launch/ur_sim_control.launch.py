@@ -151,15 +151,15 @@ def launch_setup(context, *args, **kwargs):
         package="robot_state_publisher",
         executable="robot_state_publisher",
         parameters=[robot_description, {'use_sim_time': True}],
-        output = 'both',
+        output ="both",
     )
 
 
     # RViz
 
-    #rviz2_config_file = PathJoinSubstitution([
+    # rviz2_config_file = PathJoinSubstitution([
     #   FindPackageShare('mia_hand_description'), 'rviz', 'mia_hand_config.rviz'
-    #])
+    # ])
 
     rviz_node = Node(
         package="rviz2",
@@ -184,18 +184,20 @@ def launch_setup(context, *args, **kwargs):
 
 
     rviz2_joint_state_publisher = Node(
-        condition = IfCondition(launch_rviz),
-        name = 'rviz2_joint_state_publisher',
-        package = 'mia_hand_description',
-        executable = 'rviz2_joint_state_publisher_node',
-        parameters = [
+        condition=IfCondition(launch_rviz),
+        name="rviz2_joint_state_publisher",
+        package="mia_hand_description",
+        executable="rviz2_joint_state_publisher_node",
+        parameters=[
             robot_description,
-            PathJoinSubstitution([
-              FindPackageShare('mia_hand_description'),
-              'calibration',
-              TextSubstitution(text = transmissions_config_file)
-            ])
-        ]
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("mia_hand_description"),
+                    "calibration",
+                    TextSubstitution(text = transmissions_config_file),
+                ]
+            ),
+        ],
     )
 
 
@@ -214,50 +216,54 @@ def launch_setup(context, *args, **kwargs):
     )
 
     velocity_controllers_spawner = Node(
-        name = 'velocity_controllers_spawner',
-        package = 'controller_manager',
-        executable = 'spawner',
+        name="velocity_controllers_spawner",
+        package="controller_manager",
+        executable="spawner",
         arguments = [
-            'thumb_joint_velocity_controller',
-            'index_joint_velocity_controller',
-            'mrl_joint_velocity_controller',
-            '--inactive',
-            '-c', '/controller_manager'
-        ]
+            "thumb_joint_velocity_controller",
+            "index_joint_velocity_controller",
+            "mrl_joint_velocity_controller",
+            "--inactive",
+            "-c",
+            "/controller_manager",
+        ],
     )
 
     position_controllers_spawner = Node(
-        name = 'position_controllers_spawner',
-        package = 'controller_manager',
-        executable = 'spawner',
-        arguments = [
-            'thumb_joint_position_controller',
-            'index_joint_position_controller',
-            'mrl_joint_position_controller',
-            '-c', '/controller_manager'
-        ]
+        name="position_controllers_spawner",
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "thumb_joint_position_controller",
+            "index_joint_position_controller",
+            "mrl_joint_position_controller",
+            "-c",
+            "/controller_manager",
+        ],
     )
 
     joint_trajectory_controller_spawner = Node(
-        name = 'joint_trajectory_controller_spawner',
-        package = 'controller_manager',
-        executable = 'spawner',
-        arguments = [
-            'joint_trajectory_controller',
-            '--inactive',
-            '-c', '/controller_manager'
-        ]
+        name="joint_trajectory_controller_spawner",
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "joint_trajectory_controller",
+            "--inactive",
+            "-c",
+            "/controller_manager",
+        ],
     )
 
     trajectory_controller_spawner = Node(
-        name = 'trajectory_controller_spawner',
-        package = 'controller_manager',
-        executable = 'spawner',
-        arguments = [
-            'joint_trajectory_controller',
-            '--inactive',
-            '-c', '/controller_manager'
-        ]
+        name="trajectory_controller_spawner",
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "joint_trajectory_controller",
+            "--inactive",
+            "-c",
+            "/controller_manager",
+        ],
     )
 
     # delay_velocity_controllers_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
