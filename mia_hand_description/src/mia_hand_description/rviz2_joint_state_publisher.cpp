@@ -97,4 +97,3 @@ void Rviz2JointStatePublisher::jnt_state_raw_sub_fun(
   return;
 }
 }
-

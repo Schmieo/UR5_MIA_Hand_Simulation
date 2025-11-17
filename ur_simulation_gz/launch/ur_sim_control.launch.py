@@ -53,6 +53,7 @@ from launch_ros.substitutions import FindPackageShare
 
 from os.path import exists
 
+
 def launch_setup(context, *args, **kwargs):
     # Initialize Arguments
     ur_type = LaunchConfiguration("ur_type")
@@ -71,7 +72,7 @@ def launch_setup(context, *args, **kwargs):
     world_file = LaunchConfiguration("world_file")
     # MIA Hand launch Arguments
     serial_port = LaunchConfiguration("serial_port").perform(context)
-    #rviz2_gui = LaunchConfiguration('rviz2_gui')
+    # rviz2_gui = LaunchConfiguration('rviz2_gui')
     laterality = LaunchConfiguration("laterality").perform(context)
     prefix = LaunchConfiguration("prefix").perform(context)
     robot_ns = LaunchConfiguration("robot_ns").perform(context)
@@ -80,7 +81,7 @@ def launch_setup(context, *args, **kwargs):
     # --- MIA Hand ---
     # Joint limits configuration (P)
     joint_limits_config_file_path = PathJoinSubstitution(
-        [FindPackageShare("mia_hand_description"),"calibration","joint_limits.yaml"]
+        [FindPackageShare("mia_hand_description"), "calibration", "joint_limits.yaml"]
     ).perform(context)
 
     if exists(joint_limits_config_file_path):
@@ -90,7 +91,7 @@ def launch_setup(context, *args, **kwargs):
 
     # Transmission configuration (P)
     transmissions_config_file_path = PathJoinSubstitution(
-        [FindPackageShare("mia_hand_description"),"calibration","transmission_config.yaml"]
+        [FindPackageShare("mia_hand_description"), "calibration", "transmission_config.yaml"]
     ).perform(context)
 
     if exists(transmissions_config_file_path):
@@ -100,7 +101,8 @@ def launch_setup(context, *args, **kwargs):
 
 
     # UR5 Robot description
-    robot_description_content = Command([
+    robot_description_content = Command(
+        [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             description_file,
@@ -114,7 +116,8 @@ def launch_setup(context, *args, **kwargs):
             "safety_k_position:=",
             safety_k_position,
             " ",
-            "name:=","ur5e",
+            "name:=",
+            "ur5e",
             " ",
             "ur_type:=",
             ur_type,
@@ -161,7 +164,7 @@ def launch_setup(context, *args, **kwargs):
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        parameters=[robot_description, {'use_sim_time': True}],
+        parameters=[robot_description, {"use_sim_time": True}],
         output ="both",
     )
 
@@ -205,7 +208,7 @@ def launch_setup(context, *args, **kwargs):
                 [
                     FindPackageShare("mia_hand_description"),
                     "calibration",
-                    TextSubstitution(text = transmissions_config_file),
+                    TextSubstitution(text=transmissions_config_file),
                 ]
             ),
         ],
@@ -230,7 +233,7 @@ def launch_setup(context, *args, **kwargs):
         name="velocity_controllers_spawner",
         package="controller_manager",
         executable="spawner",
-        arguments = [
+        arguments=[
             "thumb_joint_velocity_controller",
             "index_joint_velocity_controller",
             "mrl_joint_velocity_controller",
@@ -358,7 +361,7 @@ def launch_setup(context, *args, **kwargs):
         output="screen",
     )
 
-     # NEU: Starte alle Controller-Spawner ERST, nachdem der Roboter in Gazebo gespawnt wurde
+    # Starte alle Controller-Spawner ERST, nachdem der Roboter in Gazebo gespawnt wurde
     delay_spawners_after_gz_spawn = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=gz_spawn_entity,
@@ -500,37 +503,37 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            'serial_port',
-            default_value = '/dev/ttyUSB0',
-            description = 'Serial port to which Mia Hand is connected.'
+            "serial_port",
+            default_value="/dev/ttyUSB0",
+            description="Serial port to which Mia Hand is connected.",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            'laterality',
-            default_value = 'right',
-            description = 'Parameter for loading a right or left hand in RViz2.'
-                            'Ignored if rviz2_gui:=false.'
+            "laterality",
+            default_value="right",
+            description="Parameter for loading a right or left hand in RViz2."
+            "Ignored if rviz2_gui:=false.",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            'prefix',
-            default_value = '',
-            description = 'Prefix to be added before Mia Hand link and joint names.'
-                            'Useful for multi-robot scenarios.'
+            "prefix",
+            default_value= '',
+            description="Prefix to be added before Mia Hand link and joint names."
+            "Useful for multi-robot scenarios.",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            'robot_ns',
-            default_value = 'mia_hand'
+            "robot_ns",
+            default_value="mia_hand",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            'use_mock_hardware',
-            default_value = 'true',
+            "use_mock_hardware",
+            default_value ="true",
             description="Start robot with mock hardware mirroring command to its states.",
         )
     )

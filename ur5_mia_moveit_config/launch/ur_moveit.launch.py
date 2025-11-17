@@ -123,7 +123,7 @@ def generate_launch_description():
 
     octomap_config = {
         "octomap_frame": "base_link",
-        "octomap_resolution": 0.05,     # 5 cm Voxel
+        "octomap_resolution": 0.05, # 5 cm Voxel
         "max_range": 3.0,
     }
 

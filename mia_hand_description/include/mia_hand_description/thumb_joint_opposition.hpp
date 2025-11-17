@@ -91,4 +91,3 @@ private:
 };
 }
 #endif  // MIA_HAND_DESCRIPTION_THUMB_JOINT_OPPOSITION_HPP
-
