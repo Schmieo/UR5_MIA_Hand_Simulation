@@ -70,33 +70,33 @@ def launch_setup(context, *args, **kwargs):
     gazebo_gui = LaunchConfiguration("gazebo_gui")
     world_file = LaunchConfiguration("world_file")
     # MIA Hand launch Arguments
-    serial_port = LaunchConfiguration('serial_port').perform(context)
+    serial_port = LaunchConfiguration("serial_port").perform(context)
     #rviz2_gui = LaunchConfiguration('rviz2_gui')
-    laterality = LaunchConfiguration('laterality').perform(context)
-    prefix = LaunchConfiguration('prefix').perform(context)
-    robot_ns = LaunchConfiguration('robot_ns').perform(context)
-    use_mock_hardware = LaunchConfiguration('use_mock_hardware').perform(context)
+    laterality = LaunchConfiguration("laterality").perform(context)
+    prefix = LaunchConfiguration("prefix").perform(context)
+    robot_ns = LaunchConfiguration("robot_ns").perform(context)
+    use_mock_hardware = LaunchConfiguration("use_mock_hardware").perform(context)
 
     # --- MIA Hand ---
     # Joint limits configuration (P)
-    joint_limits_config_file_path = PathJoinSubstitution([
-        FindPackageShare('mia_hand_description'), 'calibration',
-        'joint_limits.yaml']).perform(context)
+    joint_limits_config_file_path = PathJoinSubstitution(
+        [FindPackageShare("mia_hand_description"),"calibration","joint_limits.yaml"]
+    ).perform(context)
 
     if exists(joint_limits_config_file_path):
-        joint_limits_config_file = 'joint_limits.yaml'
+        joint_limits_config_file = "joint_limits.yaml"
     else:
-        joint_limits_config_file = 'joint_limits_default.yaml'
+        joint_limits_config_file = "joint_limits_default.yaml"
 
     # Transmission configuration (P)
-    transmissions_config_file_path = PathJoinSubstitution([
-        FindPackageShare('mia_hand_description'), 'calibration',
-        'transmission_config.yaml']).perform(context)
+    transmissions_config_file_path = PathJoinSubstitution(
+        [FindPackageShare("mia_hand_description"),"calibration","transmission_config.yaml"]
+    ).perform(context)
 
     if exists(transmissions_config_file_path):
-        transmissions_config_file = 'transmission_config.yaml'
+        transmissions_config_file = "transmission_config.yaml"
     else:
-        transmissions_config_file = 'transmission_config_default.yaml'
+        transmissions_config_file = "transmission_config_default.yaml"
 
 
     # UR5 Robot description
@@ -105,29 +105,40 @@ def launch_setup(context, *args, **kwargs):
             " ",
             description_file,
             " ",
-            "safety_limits:=",safety_limits,
+            "safety_limits:=",
+            safety_limits,
             " ",
-            "safety_pos_margin:=",safety_pos_margin,
+            "safety_pos_margin:=",
+            safety_pos_margin,
             " ",
-            "safety_k_position:=",safety_k_position,
+            "safety_k_position:=",
+            safety_k_position,
             " ",
             "name:=","ur5e",
             " ",
-            "ur_type:=", ur_type,
+            "ur_type:=",
+            ur_type,
             " ",
-            "tf_prefix:=",tf_prefix,
+            "tf_prefix:=",
+            tf_prefix,
             " ",
-            "simulation_controllers:=",controllers_file,
+            "simulation_controllers:=",
+            controllers_file,
             " ",
-            "serial_port:=",serial_port,
+            "serial_port:=",
+            serial_port,
             " ",
-            "laterality:=",laterality,
+            "laterality:=",
+            laterality,
             " ",
-            "prefix:=",prefix,
+            "prefix:=",
+            prefix,
             " ",
-            "joint_limits_config_file:=",joint_limits_config_file,
+            "joint_limits_config_file:=",
+            joint_limits_config_file,
             " ",
-            "use_mock_hardware:=",use_mock_hardware,
+            "use_mock_hardware:=",
+            use_mock_hardware,
         ]
     )
     robot_description = {"robot_description": robot_description_content}

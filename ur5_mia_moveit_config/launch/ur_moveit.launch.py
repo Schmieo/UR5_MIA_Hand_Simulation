@@ -122,9 +122,9 @@ def generate_launch_description():
     )
 
     octomap_config = {
-    "octomap_frame": "base_link",
-    "octomap_resolution": 0.05,     # 5 cm Voxel
-    "max_range": 3.0,
+        "octomap_frame": "base_link",
+        "octomap_resolution": 0.05,     # 5 cm Voxel
+        "max_range": 3.0,
     }
 
     sensor_3d_config = load_yaml("ur5_mia_moveit_config", "config/sensor3D.yaml")

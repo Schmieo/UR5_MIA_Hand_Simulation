@@ -37,12 +37,12 @@
     <color rgba="0.640000019 0.640000019 0.640000019 1.0"/>
   </material>
 
-  <!-- World link is directly connected to the palm, and not the flange, to 
+  <!-- World link is directly connected to the palm, and not the flange, to
        reduce the length of the tf chain matrices-->
 
   <link name="world"/>
 
-  <xacro:mia_hand 
+  <xacro:mia_hand
     laterality="right"
     joint_limits_config_file="$(arg joint_limits_config_file)"
     parent="world"
