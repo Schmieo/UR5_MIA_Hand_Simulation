@@ -6,7 +6,7 @@ std::unique_ptr<Rviz2JointStatePublisher> Rviz2JointStatePublisher::create(
     std::shared_ptr<rclcpp::Node> node)
 {
   std::unique_ptr<Rviz2JointStatePublisher> ptr =
-    std::unique_ptr<Rviz2JointStatePublisher>(new Rviz2JointStatePublisher());
+  std::unique_ptr<Rviz2JointStatePublisher>(new Rviz2JointStatePublisher());
 
   if (false == ptr->init(node))
   {
@@ -96,5 +96,5 @@ void Rviz2JointStatePublisher::jnt_state_raw_sub_fun(
 
   return;
 }
-}  // namespace
+}
 

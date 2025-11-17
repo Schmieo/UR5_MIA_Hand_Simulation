@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 
-<robot xmlns:xacro="http://wiki.ros.org/xacro" name="mia_hand_left" > 
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="mia_hand_left" >
 
-  <xacro:macro 
-    name="mia_hand_left" 
+  <xacro:macro
+    name="mia_hand_left"
     params=
-      "joint_limits_config_file:='$(find mia_hand_description)/calibration/joint_limits_default.yaml' 
-      parent 
-      prefix 
+      "joint_limits_config_file:='$(find mia_hand_description)/calibration/joint_limits_default.yaml'
+      parent
+      prefix
       *origin">
 
     <!-- Importing joint limits macro -->

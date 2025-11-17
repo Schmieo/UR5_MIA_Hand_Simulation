@@ -49,7 +49,7 @@ private:
    * the static factory function #create().
    *
    * @param node Shared pointer to the state publisher ROS node.
-   * @return \code true \endcode if object initialization is successful, 
+   * @return \code true \endcode if object initialization is successful,
    *         \code false \endcode if not.
    */
   bool init(std::shared_ptr<rclcpp::Node> node);
@@ -70,7 +70,6 @@ private:
   std::string thumb_jnt_name_;   //!< Name of thumb joint in URDF.
   std::string index_jnt_name_;   //!< Name of index joint in URDF.
 };
-}  // namespace
-
+}  
 #endif  // MIA_HAND_DESCRIPTION_RVIZ2_JOINT_STATE_PUBLISHER_HPP
 
