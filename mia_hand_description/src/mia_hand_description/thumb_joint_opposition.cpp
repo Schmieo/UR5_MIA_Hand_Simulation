@@ -132,4 +132,5 @@ bool ThumbJointOpposition::load_jnt_limits_from_urdf(
 
   return success;
 }
+
 }

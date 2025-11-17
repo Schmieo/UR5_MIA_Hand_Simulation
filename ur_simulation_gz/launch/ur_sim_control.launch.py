@@ -165,9 +165,8 @@ def launch_setup(context, *args, **kwargs):
         package="robot_state_publisher",
         executable="robot_state_publisher",
         parameters=[robot_description, {"use_sim_time": True}],
-        output ="both",
+        output="both",
     )
-
 
     # RViz
 
@@ -196,7 +195,6 @@ def launch_setup(context, *args, **kwargs):
     #     arguments=["joint_state_broadcaster"],
     # )
 
-
     rviz2_joint_state_publisher = Node(
         condition=IfCondition(launch_rviz),
         name="rviz2_joint_state_publisher",
@@ -213,7 +211,6 @@ def launch_setup(context, *args, **kwargs):
             ),
         ],
     )
-
 
     # There may be other controllers of the joints, but this is the initially-started one
     initial_joint_controller_spawner_started = Node(
@@ -307,7 +304,6 @@ def launch_setup(context, *args, **kwargs):
     #         on_exit = [rviz2_joint_state_publisher]
     #     )
     # )
-
 
     # delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
     #     event_handler=OnProcessExit(
@@ -519,7 +515,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "prefix",
-            default_value= '',
+            default_value="",
             description="Prefix to be added before Mia Hand link and joint names."
             "Useful for multi-robot scenarios.",
         )
@@ -533,7 +529,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_mock_hardware",
-            default_value ="true",
+            default_value="true",
             description="Start robot with mock hardware mirroring command to its states.",
         )
     )

@@ -89,5 +89,6 @@ private:
   double thumb_opp_scale_;   //!< Used for opposition angle computation.
   double thumb_opp_offset_;  //!< Used for opposition angle computation.
 };
+
 }
 #endif  // MIA_HAND_DESCRIPTION_THUMB_JOINT_OPPOSITION_HPP

@@ -70,5 +70,6 @@ private:
   std::string thumb_jnt_name_;   //!< Name of thumb joint in URDF.
   std::string index_jnt_name_;   //!< Name of index joint in URDF.
 };
+
 }
 #endif  // MIA_HAND_DESCRIPTION_RVIZ2_JOINT_STATE_PUBLISHER_HPP

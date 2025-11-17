@@ -121,9 +121,10 @@ def generate_launch_description():
         .to_moveit_configs()
     )
 
+    # octomap_resolution: 5 cm Voxel
     octomap_config = {
         "octomap_frame": "base_link",
-        "octomap_resolution": 0.05, # 5 cm Voxel
+        "octomap_resolution": 0.05,
         "max_range": 3.0,
     }
 
