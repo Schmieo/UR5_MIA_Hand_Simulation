@@ -20,6 +20,8 @@
   <!-- import Mia Hand ROS2 control macro -->
   <xacro:include filename="$(find mia_hand_description)/urdf/mia_hand.ros2_control.xacro"/>
 
+  <!-- import Camera macro -->
+  <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro"/>
 
   <!-- possible 'ur_type' values: ur3, ur3e, ur5, ur5e, ur7e, ur10, ur10e, ur12e, ur16e, ur15, ur20, ur30 -->
   <!-- the default value should raise an error in case this was called without defining the type -->
@@ -97,6 +99,15 @@
     </xacro:if>
   </xacro:mia_hand>
 
+   <!-- RealSense D435 Camera -->
+  <xacro:sensor_d435
+      name="camera"
+      parent="base_link">
+    <!-- relative Pose Kamera zu diesem Link -->
+    <origin xyz="0 0 1.30" rpy="0 0 0"/>
+  </xacro:sensor_d435>
+
+
   <!-- Gazebo specific elements -->
   <gazebo reference="world"></gazebo>
 
@@ -123,5 +134,6 @@
     serial_port="$(arg serial_port)"
     use_mock_hardware="$(arg use_mock_hardware)"
   />
+
 
 </robot>

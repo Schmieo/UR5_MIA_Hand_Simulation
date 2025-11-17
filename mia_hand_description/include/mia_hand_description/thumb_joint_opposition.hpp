@@ -20,7 +20,7 @@ public:
    * A factory function is used for avoiding to throw exceptions in the class
    * constructor, in case of errors during object initialization.
    *
-   * @param node Shared pointer to ROS node where to get thumb joint limits and 
+   * @param node Shared pointer to ROS node where to get thumb joint limits and
    *             parameters from.
    * @param prefix Prefix added before link and joint names in the URDF.
    * @return \code std::unique_ptr \endcode to the new ThumbOpposition object.
@@ -36,7 +36,7 @@ public:
   ThumbJointOpposition& operator=(ThumbJointOpposition&) = delete;
 
   /**
-   * \brief Function for mapping the thumb joint opposition from the index joint 
+   * \brief Function for mapping the thumb joint opposition from the index joint
    *        angle.
    *
    * @param index_jnt_ang Index joint angle, in rad.
@@ -60,10 +60,10 @@ private:
    * This function is necessary for accessing all the non-static members through
    * the static factory function #create().
    *
-   * @param node Shared pointer to ROS node where to get thumb joint limits and 
+   * @param node Shared pointer to ROS node where to get thumb joint limits and
    *             parameters from.
    * @param prefix Prefix added before link and joint names in the URDF.
-   * @return \code true \endcode if object initialization is successful, 
+   * @return \code true \endcode if object initialization is successful,
    *         \code false \endcode if not.
    */
   bool init(std::shared_ptr<rclcpp::Node> node, const std::string& prefix);

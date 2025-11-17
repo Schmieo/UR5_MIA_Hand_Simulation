@@ -81,7 +81,7 @@ bool ThumbJointOpposition::load_jnt_limits_from_urdf(
     std::shared_ptr<rclcpp::Node> node, const std::string& prefix)
 {
   bool success = true;
-
+  (void)prefix; // prevent -Wunused-parameter
   std::string urdf = node->declare_parameter("robot_description", "");
 
   if ("" != urdf)  // URDF not empty

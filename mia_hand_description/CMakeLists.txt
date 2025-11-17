@@ -31,7 +31,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   include
 )
 
-add_executable(rviz2_joint_state_publisher_node 
+add_executable(rviz2_joint_state_publisher_node
   src/rviz2_joint_state_publisher_node.cpp
 )
 
@@ -61,7 +61,6 @@ install(DIRECTORY
 
 # Installing launch, URDF and config files.
 install(DIRECTORY
-  launch
   urdf
   materials
   meshes

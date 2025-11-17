@@ -121,6 +121,14 @@ def generate_launch_description():
         .to_moveit_configs()
     )
 
+    octomap_config = {
+    "octomap_frame": "base_link",
+    "octomap_resolution": 0.05,     # 5 cm Voxel
+    "max_range": 3.0,
+    }
+
+    sensor_3d_config = load_yaml("ur5_mia_moveit_config", "config/sensor3D.yaml")
+
     warehouse_ros_config = {
         "warehouse_plugin": "warehouse_ros_sqlite::DatabaseConnection",
         "warehouse_host": warehouse_sqlite_path,
@@ -147,6 +155,8 @@ def generate_launch_description():
                 "use_sim_time": use_sim_time,
                 "publish_robot_description_semantic": publish_robot_description_semantic,
             },
+            octomap_config,
+            sensor_3d_config,
         ],
     )
 
