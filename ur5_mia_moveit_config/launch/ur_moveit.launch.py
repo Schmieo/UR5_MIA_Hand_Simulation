@@ -118,6 +118,7 @@ def generate_launch_description():
     moveit_config = (
         MoveItConfigsBuilder(robot_name="ur5e", package_name="ur5_mia_moveit_config")
         .robot_description_semantic(Path("srdf") / "ur5_mia.srdf.xacro", {"name": ur_type})
+        .sensors_3d(file_path=Path("config") / "sensor3D.yaml")
         .to_moveit_configs()
     )
 
@@ -128,7 +129,7 @@ def generate_launch_description():
         "max_range": 3.0,
     }
 
-    sensor_3d_config = load_yaml("ur5_mia_moveit_config", "config/sensor3D.yaml")
+    # sensor_3d_config = load_yaml("ur5_mia_moveit_config", "config/sensor3D.yaml")
 
     warehouse_ros_config = {
         "warehouse_plugin": "warehouse_ros_sqlite::DatabaseConnection",
@@ -157,7 +158,6 @@ def generate_launch_description():
                 "publish_robot_description_semantic": publish_robot_description_semantic,
             },
             octomap_config,
-            sensor_3d_config,
         ],
     )
 
