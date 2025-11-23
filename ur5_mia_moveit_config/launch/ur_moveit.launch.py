@@ -159,6 +159,7 @@ def generate_launch_description():
             },
             octomap_config,
         ],
+        arguments=["--ros-args", "--log-level", "error"],
     )
 
     servo_yaml = load_yaml("ur5_mia_moveit_config", "config/ur_servo.yaml")

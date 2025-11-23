@@ -35,6 +35,7 @@ from launch.actions import (
     OpaqueFunction,
     RegisterEventHandler,
     TimerAction,
+    ExecuteProcess,
 )
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
@@ -331,6 +332,9 @@ def launch_setup(context, *args, **kwargs):
             "ur5e",
             "-allow_renaming",
             "true",
+            "--ros-args",
+            "--log-level",
+            "error",
         ],
     )
 
@@ -355,6 +359,9 @@ def launch_setup(context, *args, **kwargs):
             "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",
             # "/rgbd_camera/depth_image@sensor_msgs/msg/Image[gz.msgs.Image",
             # "/rgbd_camera/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked",
+            "--ros-args",
+            "--log-level",
+            "error",
         ],
         output="screen",
     )
@@ -373,6 +380,25 @@ def launch_setup(context, *args, **kwargs):
             ],
         )
     )
+
+
+    # Terminal clear
+    # clear_terminal = ExecuteProcess(
+    #     cmd=["bash", "-c", 'clear && printf "\\033[3J" && echo "=== Manipulation Demo is ready ==="'],
+    #     output="screen",
+    # )
+    # # Event-Handler: wenn spawner fertig ist → clear ausführen
+    # clear_on_spawner_exit = RegisterEventHandler(
+    #     OnProcessExit(
+    #         target_action=velocity_controllers_spawner,
+    #         on_exit=[clear_terminal],
+    #     )
+    # )
+
+    # delayed_clear_on_spawner_exit = TimerAction(
+    #     period=30.0,
+    #     actions=[clear_on_spawner_exit],
+    # )
 
     nodes_to_start = [
         robot_state_publisher_node,
