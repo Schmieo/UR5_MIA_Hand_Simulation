@@ -43,6 +43,7 @@
   <xacro:arg name="laterality" default="right" />
   <xacro:arg name="joint_limits_config_file" default="joint_limits_default.yaml"/>
   <xacro:arg name="prefix" default=""/>
+  <xacro:arg name="mia_use_mock_hardware" default="true"/>
 
   <!-- create link fixed to the "world" -->
   <link name="world" />
@@ -132,7 +133,7 @@
     name="MiaHand"
     prefix="$(arg prefix)"
     serial_port="$(arg serial_port)"
-    use_mock_hardware="true"
+    use_mock_hardware="$(arg mia_use_mock_hardware)"
   />
 
 

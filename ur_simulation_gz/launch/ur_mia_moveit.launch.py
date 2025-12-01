@@ -38,9 +38,12 @@ from launch_ros.substitutions import FindPackageShare
 def launch_setup(context, *args, **kwargs):
     # Initialize Arguments
     ur_type = LaunchConfiguration("ur_type")
+    robot_ip = LaunchConfiguration("robot_ip")
     safety_limits = LaunchConfiguration("safety_limits")
-    # General arguments
-    description_file = LaunchConfiguration("description_file")
+
+    use_sim_time = LaunchConfiguration("use_sim_time")
+    launch_rviz = LaunchConfiguration("launch_rviz")
+
     moveit_launch_file = LaunchConfiguration("moveit_launch_file")
 
     ur_control_launch = IncludeLaunchDescription(
@@ -51,8 +54,8 @@ def launch_setup(context, *args, **kwargs):
         ),
         launch_arguments={
             "ur_type": ur_type,
+            "robot_ip": robot_ip,
             "safety_limits": safety_limits,
-            "description_file": description_file,
             "launch_rviz": "false",
         }.items(),
     )
@@ -100,19 +103,30 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            "robot_ip",
+            default_value="192.168.56.101",
+            description="IP address by which the robot can be reached.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             "safety_limits",
             default_value="true",
             description="Enables the safety limits controller if true.",
         )
     )
-    # General arguments
     declared_arguments.append(
         DeclareLaunchArgument(
-            "description_file",
-            default_value=PathJoinSubstitution(
-                [FindPackageShare("ur_simulation_gz"), "urdf", "ur_mia.urdf.xacro"]
-            ),
-            description="URDF/XACRO description file (absolute path) with the robot.",
+            "use_sim_time",
+            default_value="false",
+            description="Use simulation time. For real hardware: false.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "launch_rviz",
+            default_value="true",
+            description="Launch MoveIt RViz.",
         )
     )
     declared_arguments.append(

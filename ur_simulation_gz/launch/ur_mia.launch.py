@@ -16,10 +16,17 @@ def generate_launch_description():
     ur_type = LaunchConfiguration("ur_type")
     robot_ip = LaunchConfiguration("robot_ip")
 
+    # UR ros2_control mock flags (for real robot: keep false)
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
     mock_sensor_commands = LaunchConfiguration("mock_sensor_commands")
 
+    # Mia hand mock flag (default true so it doesn't block UR bringup if the hand isn't present)
+    mia_use_mock_hardware = LaunchConfiguration("mia_use_mock_hardware")
+
     headless_mode = LaunchConfiguration("headless_mode")
+
+    # Allow overriding kinematics calibration (recommended for real UR)
+    kinematics_params = LaunchConfiguration("kinematics_params")
 
     # Load description with necessary parameters
     robot_description_content = Command(
@@ -40,11 +47,17 @@ def generate_launch_description():
             "ur_type:=",
             ur_type,
             " ",
+            "kinematics_params:=",
+            kinematics_params,
+            " ",
             "use_mock_hardware:=",
             use_mock_hardware,
             " ",
             "mock_sensor_commands:=",
             mock_sensor_commands,
+            " ",
+            "mia_use_mock_hardware:=",
+            mia_use_mock_hardware,
             " ",
             "headless_mode:=",
             headless_mode,
@@ -79,6 +92,15 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            "kinematics_params",
+            default_value=PathJoinSubstitution(
+                [FindPackageShare("ur_description"), "config", ur_type, "default_kinematics.yaml"]
+            ),
+            description="Path to kinematics calibration YAML for the UR model.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             "use_mock_hardware",
             default_value="false",
             description="Start robot with mock hardware mirroring command to its states.",
@@ -90,6 +112,13 @@ def generate_launch_description():
             default_value="false",
             description="Enable mock command interfaces for sensors used for simple simulations. "
             "Used only if 'use_mock_hardware' parameter is true.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "mia_use_mock_hardware",
+            default_value="true",
+            description="Start MIA Hand ros2_control as mock hardware. Set false only if you have the real hand connected.",
         )
     )
     declared_arguments.append(

@@ -18,6 +18,9 @@ from launch.substitutions import (
 def generate_launch_description():
     ur_type = LaunchConfiguration("ur_type")
     robot_ip = LaunchConfiguration("robot_ip")
+    safety_limits = LaunchConfiguration("safety_limits")
+    launch_rviz = LaunchConfiguration("launch_rviz")
+
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
@@ -45,7 +48,18 @@ def generate_launch_description():
         )
     )
     declared_arguments.append(
-        DeclareLaunchArgument("launch_rviz", default_value="false", description="Launch RViz?")
+        DeclareLaunchArgument(
+            "safety_limits",
+            default_value="true",
+            description="Enables the safety limits controller if true.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "launch_rviz",
+            default_value="false",
+            description="Launch RViz from the UR driver bringup (usually false if you use MoveIt RViz).",
+        )
     )
 
     return LaunchDescription(
@@ -66,7 +80,9 @@ def generate_launch_description():
                 launch_arguments={
                     "ur_type": ur_type,
                     "robot_ip": robot_ip,
+                    "safety_limits": safety_limits,
                     "tf_prefix": "",
+                    "launch_rviz": launch_rviz,
                     "rviz_config_file": PathJoinSubstitution(
                         [
                             FindPackageShare("ur5_mia_moveit_config"),
