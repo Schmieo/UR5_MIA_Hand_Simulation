@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<xacro:macro name="ur_realsense_mount" params="parent_link xyz rpy">
+
+  <!-- Neuer Link -->
+  <link name="custom_tool">
+    <visual>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+      <geometry>
+        <mesh filename="package://ur_simulation_gz/meshes/halterung_realsense.stl" scale="1 1 1"/>
+      </geometry>
+    </visual>
+
+    <collision>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+      <geometry>
+        <mesh filename="package://ur_simulation_gz/meshes/halterung_realsense.stl" scale="1 1 1"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="0.001" ixy="0" ixz="0"
+        iyy="0.001" iyz="0"
+        izz="0.001"/>
+      </inertia>
+    </inertial>
+  </link>
+
+  <!-- Fixed Joint -->
+  <joint name="custom_tool_joint" type="fixed">
+    <parent link="${parent_link}"/>
+    <child  link="custom_tool"/>
+    <origin xyz="${xyz}" rpy="${rpy}"/>
+  </joint>
+
+</xacro:macro>
