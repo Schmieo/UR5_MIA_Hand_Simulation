@@ -43,7 +43,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "robot_ip",
-            default_value="192.168.56.101",  # put your robot's IP address here
+            default_value="10.135.245.20",  # put your robot's IP address here
             description="IP address by which the robot can be reached.",
         )
     )
@@ -57,7 +57,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "launch_rviz",
-            default_value="false",
+            default_value="true",
             description="Launch RViz from the UR driver bringup (usually false if you use MoveIt RViz).",
         )
     )
@@ -81,15 +81,15 @@ def generate_launch_description():
                     "ur_type": ur_type,
                     "robot_ip": robot_ip,
                     "safety_limits": safety_limits,
-                    "tf_prefix": "",
+                    # "tf_prefix": "",
                     "launch_rviz": launch_rviz,
-                    "rviz_config_file": PathJoinSubstitution(
-                        [
-                            FindPackageShare("ur5_mia_moveit_config"),
-                            "rviz",
-                            "moveit.rviz",
-                        ]
-                    ),
+                    # "rviz_config_file": PathJoinSubstitution(
+                    #     [
+                    #         FindPackageShare("ur5_mia_moveit_config"),
+                    #         "rviz",
+                    #         "moveit.rviz",
+                    #     ]
+                    # ),
                     "description_launchfile": PathJoinSubstitution(
                         [
                             FindPackageShare("ur_simulation_gz"),

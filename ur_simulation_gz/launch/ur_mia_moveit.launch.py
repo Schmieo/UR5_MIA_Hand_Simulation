@@ -29,7 +29,11 @@
 # Author: Denis Stogl
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction
+from launch.actions import (
+    DeclareLaunchArgument,
+    IncludeLaunchDescription,
+    OpaqueFunction,
+)
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
@@ -49,14 +53,18 @@ def launch_setup(context, *args, **kwargs):
     ur_control_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution(
-                [FindPackageShare("ur_simulation_gz"), "launch", "start_ur_mia.launch.py"]
+                [
+                    FindPackageShare("ur_simulation_gz"),
+                    "launch",
+                    "start_ur_mia.launch.py",
+                ]
             )
         ),
         launch_arguments={
             "ur_type": ur_type,
             "robot_ip": robot_ip,
             "safety_limits": safety_limits,
-            "launch_rviz": "false",
+            "launch_rviz": launch_rviz,
         }.items(),
     )
 
@@ -64,8 +72,8 @@ def launch_setup(context, *args, **kwargs):
         PythonLaunchDescriptionSource(moveit_launch_file),
         launch_arguments={
             "ur_type": ur_type,
-            "use_sim_time": "true",
-            "launch_rviz": "true",
+            "use_sim_time": use_sim_time,
+            "launch_rviz": launch_rviz,
         }.items(),
     )
 
@@ -104,7 +112,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "robot_ip",
-            default_value="192.168.56.101",
+            default_value="10.135.245.20",
             description="IP address by which the robot can be reached.",
         )
     )
@@ -144,4 +152,6 @@ def generate_launch_description():
         )
     )
 
-    return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])
+    return LaunchDescription(
+        declared_arguments + [OpaqueFunction(function=launch_setup)]
+    )
