@@ -4,8 +4,8 @@
   <!-- robot name parameter -->
   <xacro:arg name="name" default="ur5e"/>
 
-  <xacro:include filename="$(find ur5_mia_moveit_config)/srdf/ur_macro.srdf.xacro"/>
+  <xacro:include filename="$(find ur5_mia_moveit_config)/srdf/manipulator_macro.srdf.xacro"/>
 
-  <xacro:ur_srdf/>
+  <xacro:manipulator_srdf/>
 
 </robot>
