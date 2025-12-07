@@ -108,16 +108,18 @@ def declare_arguments():
 
 
 def generate_launch_description():
-    launch_rviz = LaunchConfiguration("launch_rviz")
+
     ur_type = LaunchConfiguration("ur_type")
+    launch_rviz = LaunchConfiguration("launch_rviz")
+
     warehouse_sqlite_path = LaunchConfiguration("warehouse_sqlite_path")
     launch_servo = LaunchConfiguration("launch_servo")
     use_sim_time = LaunchConfiguration("use_sim_time")
     publish_robot_description_semantic = LaunchConfiguration("publish_robot_description_semantic")
 
     moveit_config = (
-        MoveItConfigsBuilder(robot_name="ur5e", package_name="ur5_mia_moveit_config")
-        .robot_description_semantic(Path("srdf") / "ur5_mia.srdf.xacro", {"name": ur_type})
+        MoveItConfigsBuilder(robot_name="ur5e", package_name="manipulator_moveit_config")
+        .robot_description_semantic(Path("srdf") / "manipulator.srdf.xacro", {"name": ur_type})
         .sensors_3d(file_path=Path("config") / "sensor3D.yaml")
         .to_moveit_configs()
     )
@@ -128,8 +130,6 @@ def generate_launch_description():
         "octomap_resolution": 0.05,
         "max_range": 3.0,
     }
-
-    # sensor_3d_config = load_yaml("ur5_mia_moveit_config", "config/sensor3D.yaml")
 
     warehouse_ros_config = {
         "warehouse_plugin": "warehouse_ros_sqlite::DatabaseConnection",
@@ -162,7 +162,7 @@ def generate_launch_description():
         arguments=["--ros-args", "--log-level", "error"],
     )
 
-    servo_yaml = load_yaml("ur5_mia_moveit_config", "config/ur_servo.yaml")
+    servo_yaml = load_yaml("manipulator_moveit_config", "config/ur_servo.yaml")
     servo_params = {"moveit_servo": servo_yaml}
     servo_node = Node(
         package="moveit_servo",
@@ -176,7 +176,7 @@ def generate_launch_description():
     )
 
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ur5_mia_moveit_config"), "config", "moveit.rviz"]
+        [FindPackageShare("manipulator_moveit_config"), "config", "moveit.rviz"]
     )
     rviz_node = Node(
         package="rviz2",

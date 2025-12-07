@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(ur5_mia_moveit_config)
+project(manipulator_moveit_config)
 
 find_package(ament_cmake REQUIRED)
 

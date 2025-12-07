@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>ur5_mia_moveit_config</name>
+  <name>manipulator_moveit_config</name>
   <version>0.1.0</version>
-  <description>MoveIt 2 configuration for UR5 + Mia Hand (minimal, generated).</description>
+  <description>MoveIt 2 configuration for UR5 + Mia Hand.</description>
 
   <maintainer email="you@example.com">You</maintainer>
   <license>Apache2.0</license>

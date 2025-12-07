@@ -11,35 +11,27 @@ from launch.substitutions import (
     PathJoinSubstitution,
 )
 
+def launch_setup(context, *args, **kwargs):
 
-def generate_launch_description():
     ur_type = LaunchConfiguration("ur_type")
+    safety_limits = LaunchConfiguration("safety_limits")
     robot_ip = LaunchConfiguration("robot_ip")
-
-    # UR ros2_control mock flags (for real robot: keep false)
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
     mock_sensor_commands = LaunchConfiguration("mock_sensor_commands")
 
-    # Mia hand mock flag (default true so it doesn't block UR bringup if the hand isn't present)
     mia_use_mock_hardware = LaunchConfiguration("mia_use_mock_hardware")
 
     headless_mode = LaunchConfiguration("headless_mode")
-
-    # Allow overriding kinematics calibration (recommended for real UR)
     kinematics_params = LaunchConfiguration("kinematics_params")
+
+    description_file = LaunchConfiguration("description_file")
 
     # Load description with necessary parameters
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ur_simulation_gz"),
-                    "urdf",
-                    "ur_mia.urdf.xacro",
-                ]
-            ),
+            description_file,
             " ",
             "robot_ip:=",
             robot_ip,
@@ -65,6 +57,21 @@ def generate_launch_description():
     )
     robot_description = {"robot_description": robot_description_content}
 
+    robot_state_publisher_node = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        parameters=[robot_description],
+        output="both",
+    )
+
+    nodes_to_launch = [
+        robot_state_publisher_node,
+    ]
+
+    return nodes_to_launch
+
+
+def generate_launch_description():
     declared_arguments = []
     # UR specific arguments
     declared_arguments.append(
@@ -87,7 +94,16 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "robot_ip", description="IP address by which the robot can be reached."
+            "robot_ip",
+            default_value="10.135.245.20",  # put your robot's IP address here
+            description="IP address by which the robot can be reached.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "safety_limits",
+            default_value="true",
+            description="Enables the safety limits controller if true.",
         )
     )
     declared_arguments.append(
@@ -128,15 +144,14 @@ def generate_launch_description():
             description="Enable headless mode for robot control",
         )
     )
-
-    return LaunchDescription(
-        declared_arguments
-        + [
-            Node(
-                package="robot_state_publisher",
-                executable="robot_state_publisher",
-                output="both",
-                parameters=[robot_description],
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "description_file",
+            default_value=PathJoinSubstitution(
+                [FindPackageShare("manipulator_description"), "urdf", "manipulator.urdf.xacro"]
             ),
-        ]
+            description="URDF/XACRO description file (absolute path) with the robot.",
+        )
     )
+
+    return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

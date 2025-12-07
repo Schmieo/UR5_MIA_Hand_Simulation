@@ -36,31 +36,42 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def launch_setup(context, *args, **kwargs):
-    # Initialize Arguments
+
     ur_type = LaunchConfiguration("ur_type")
     safety_limits = LaunchConfiguration("safety_limits")
-    # General arguments
-    controllers_file = LaunchConfiguration("controllers_file")
-    description_file = LaunchConfiguration("description_file")
-    moveit_launch_file = LaunchConfiguration("moveit_launch_file")
 
-    ur_control_launch = IncludeLaunchDescription(
+    controllers_file = LaunchConfiguration("controllers_file")
+
+
+    manipulator_sim_control_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution(
-                [FindPackageShare("ur_simulation_gz"), "launch", "ur_sim_control.launch.py"]
+                [
+                    FindPackageShare("manipulator_description"),
+                    "launch",
+                    "manipulator_sim_control.launch.py",
+                ]
             )
         ),
         launch_arguments={
             "ur_type": ur_type,
             "safety_limits": safety_limits,
             "controllers_file": controllers_file,
-            "description_file": description_file,
             "launch_rviz": "false",
         }.items(),
     )
 
-    ur_moveit_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(moveit_launch_file),
+    # Launch MoveIt and RViz
+    manipulator_moveit_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("manipulator_moveit_config"),
+                    "launch",
+                    "manipulator_moveit_config.launch.py",
+                ]
+            )
+        ),
         launch_arguments={
             "ur_type": ur_type,
             "use_sim_time": "true",
@@ -69,8 +80,8 @@ def launch_setup(context, *args, **kwargs):
     )
 
     nodes_to_launch = [
-        ur_control_launch,
-        ur_moveit_launch,
+        manipulator_sim_control_launch,
+        manipulator_moveit_launch,
     ]
 
     return nodes_to_launch
@@ -112,32 +123,9 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "controllers_file",
             default_value=PathJoinSubstitution(
-                [FindPackageShare("ur_simulation_gz"), "config", "ur_controllers.yaml"]
+                [FindPackageShare("manipulator_description"), "config", "manipulator_controllers.yaml"]
             ),
             description="Absolute path to YAML file with the controllers configuration.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "description_file",
-            default_value=PathJoinSubstitution(
-                [FindPackageShare("ur_simulation_gz"), "urdf", "ur_gz.urdf.xacro"]
-            ),
-            description="URDF/XACRO description file (absolute path) with the robot.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "moveit_launch_file",
-            default_value=PathJoinSubstitution(
-                [
-                    FindPackageShare("ur5_mia_moveit_config"),
-                    "launch",
-                    "ur_moveit.launch.py",
-                ]
-            ),
-            description="Absolute path for MoveIt launch file, part of a config package with robot SRDF/XACRO files. Usually the argument "
-            "is not set, it enables use of a custom moveit config.",
         )
     )
 

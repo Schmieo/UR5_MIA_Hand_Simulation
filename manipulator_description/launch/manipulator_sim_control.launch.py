@@ -56,7 +56,7 @@ from os.path import exists
 
 
 def launch_setup(context, *args, **kwargs):
-    # Initialize Arguments
+
     ur_type = LaunchConfiguration("ur_type")
     safety_limits = LaunchConfiguration("safety_limits")
     safety_pos_margin = LaunchConfiguration("safety_pos_margin")
@@ -66,19 +66,18 @@ def launch_setup(context, *args, **kwargs):
     tf_prefix = LaunchConfiguration("tf_prefix")
     activate_joint_controller = LaunchConfiguration("activate_joint_controller")
     initial_joint_controller = LaunchConfiguration("initial_joint_controller")
-    description_file = LaunchConfiguration("description_file")
+
     launch_rviz = LaunchConfiguration("launch_rviz")
-    rviz_config_file = LaunchConfiguration("rviz_config_file")
+    # rviz_config_file = LaunchConfiguration("rviz_config_file")
     gazebo_gui = LaunchConfiguration("gazebo_gui")
     world_file = LaunchConfiguration("world_file")
     # MIA Hand launch Arguments
     serial_port = LaunchConfiguration("serial_port").perform(context)
-    # rviz2_gui = LaunchConfiguration('rviz2_gui')
     laterality = LaunchConfiguration("laterality").perform(context)
     prefix = LaunchConfiguration("prefix").perform(context)
-    robot_ns = LaunchConfiguration("robot_ns").perform(context)
     use_mock_hardware = LaunchConfiguration("use_mock_hardware").perform(context)
 
+    description_file = LaunchConfiguration("description_file")
     # --- MIA Hand ---
     # Joint limits configuration (P)
     joint_limits_config_file_path = PathJoinSubstitution(
@@ -101,7 +100,7 @@ def launch_setup(context, *args, **kwargs):
         transmissions_config_file = "transmission_config_default.yaml"
 
 
-    # UR5 Robot description
+    # Load description with necessary parameters
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
@@ -116,9 +115,6 @@ def launch_setup(context, *args, **kwargs):
             " ",
             "safety_k_position:=",
             safety_k_position,
-            " ",
-            "name:=",
-            "ur5e",
             " ",
             "ur_type:=",
             ur_type,
@@ -147,21 +143,6 @@ def launch_setup(context, *args, **kwargs):
     )
     robot_description = {"robot_description": robot_description_content}
 
-    # ur_controllers = PathJoinSubstitution([
-    #     FindPackageShare('ur_simulation_gz'),
-    #     'config',
-    #     'ur_controllers.yaml'
-    # ])
-
-    # ros2_control_node = Node(
-    #     package = 'controller_manager',
-    #     executable = 'ros2_control_node',
-    #     parameters =[
-    #         ParameterFile(ur_controllers, allow_substs=True),
-    #     ],
-    #     output = 'both',
-    # )
-
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
@@ -169,32 +150,20 @@ def launch_setup(context, *args, **kwargs):
         output="both",
     )
 
-    # RViz
-
-    # rviz2_config_file = PathJoinSubstitution([
-    #   FindPackageShare('mia_hand_description'), 'rviz', 'mia_hand_config.rviz'
-    # ])
-
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file],
-        condition=IfCondition(launch_rviz),
-    )
+    # rviz_node = Node(
+    #     package="rviz2",
+    #     executable="rviz2",
+    #     name="rviz2",
+    #     output="log",
+    #     arguments=["-d", rviz_config_file],
+    #     condition=IfCondition(launch_rviz),
+    # )
 
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster", "-c", "/controller_manager"],
     )
-
-    # joint_state_broadcaster_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["joint_state_broadcaster"],
-    # )
 
     rviz2_joint_state_publisher = Node(
         condition=IfCondition(launch_rviz),
@@ -278,46 +247,6 @@ def launch_setup(context, *args, **kwargs):
         ],
     )
 
-    # delay_velocity_controllers_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-    #     event_handler = OnProcessExit(
-    #         target_action = joint_state_broadcaster_spawner,
-    #         on_exit = [velocity_controllers_spawner]
-    #     )
-    # )
-
-    # delay_position_controllers_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-    #     event_handler = OnProcessExit(
-    #         target_action = joint_state_broadcaster_spawner,
-    #         on_exit = [position_controllers_spawner]
-    #     )
-    # )
-
-    # delay_trajectory_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-    #     event_handler = OnProcessExit(
-    #         target_action = joint_state_broadcaster_spawner,
-    #         on_exit = [trajectory_controller_spawner]
-    #     )
-    # )
-
-    # delay_rviz_joint_state_publisher_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-    #     event_handler = OnProcessExit(
-    #         target_action = joint_state_broadcaster_spawner,
-    #         on_exit = [rviz2_joint_state_publisher]
-    #     )
-    # )
-
-    # delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-    #     event_handler=OnProcessExit(
-    #         target_action=joint_state_broadcaster_spawner,
-    #         on_exit=[rviz_node],
-    #     ),
-    #     condition=IfCondition(launch_rviz),
-    # )
-
-    # delayed_ros2_control_node = TimerAction(
-    #     period=5.0,
-    #     actions=[ros2_control_node],
-    # )
 
     # --- GZ nodes ---
 
@@ -382,36 +311,18 @@ def launch_setup(context, *args, **kwargs):
     )
 
 
-    # Terminal clear
-    # clear_terminal = ExecuteProcess(
-    #     cmd=["bash", "-c", 'clear && printf "\\033[3J" && echo "=== Manipulation Demo is ready ==="'],
-    #     output="screen",
-    # )
-    # # Event-Handler: wenn spawner fertig ist → clear ausführen
-    # clear_on_spawner_exit = RegisterEventHandler(
-    #     OnProcessExit(
-    #         target_action=velocity_controllers_spawner,
-    #         on_exit=[clear_terminal],
-    #     )
-    # )
-
-    # delayed_clear_on_spawner_exit = TimerAction(
-    #     period=30.0,
-    #     actions=[clear_on_spawner_exit],
-    # )
-
-    nodes_to_start = [
+    nodes_to_launch = [
         robot_state_publisher_node,
         gz_launch_description,
         gz_spawn_entity,
         delay_spawners_after_gz_spawn,
         initial_joint_controller_spawner_stopped,
         initial_joint_controller_spawner_started,
-        rviz_node,
+        # rviz_node,
         gz_sim_bridge,
     ]
 
-    return nodes_to_start
+    return nodes_to_launch
 
 
 def generate_launch_description():
@@ -459,7 +370,6 @@ def generate_launch_description():
             description="k-position factor in the safety controller.",
         )
     )
-    # General arguments
     declared_arguments.append(
         DeclareLaunchArgument(
             "controllers_file",
@@ -473,9 +383,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "tf_prefix",
             default_value='""',
-            description="Prefix of the joint names, useful for "
-            "multi-robot setup. If changed than also joint names in the controllers' configuration "
-            "have to be updated.",
+            description="Prefix of the joint names.",
         )
     )
     declared_arguments.append(
@@ -496,7 +404,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "description_file",
             default_value=PathJoinSubstitution(
-                [FindPackageShare("ur_simulation_gz"), "urdf", "ur_gz.urdf.xacro"]
+                [FindPackageShare("manipulator_description"), "urdf", "manipulator_gz.urdf.xacro"]
             ),
             description="URDF/XACRO description file (absolute path) with the robot.",
         )
@@ -504,15 +412,15 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?")
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "rviz_config_file",
-            default_value=PathJoinSubstitution(
-                [FindPackageShare("ur_description"), "rviz", "view_robot.rviz"]
-            ),
-            description="Rviz config file (absolute path) to use when launching rviz.",
-        )
-    )
+    # declared_arguments.append(
+    #     DeclareLaunchArgument(
+    #         "rviz_config_file",
+    #         default_value=PathJoinSubstitution(
+    #             [FindPackageShare("ur_description"), "rviz", "view_robot.rviz"]
+    #         ),
+    #         description="Rviz config file (absolute path) to use when launching rviz.",
+    #     )
+    # )
     declared_arguments.append(
         DeclareLaunchArgument(
             "gazebo_gui", default_value="true", description="Start gazebo with GUI?"
@@ -536,8 +444,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "laterality",
             default_value="right",
-            description="Parameter for loading a right or left hand in RViz2."
-            "Ignored if rviz2_gui:=false.",
+            description="Parameter for loading a right or left hand in RViz2.",
         )
     )
     declared_arguments.append(
@@ -546,12 +453,6 @@ def generate_launch_description():
             default_value="",
             description="Prefix to be added before Mia Hand link and joint names."
             "Useful for multi-robot scenarios.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "robot_ns",
-            default_value="mia_hand",
         )
     )
     declared_arguments.append(
