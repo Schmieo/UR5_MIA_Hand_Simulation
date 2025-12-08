@@ -110,7 +110,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "kinematics_params",
             default_value=PathJoinSubstitution(
-                [FindPackageShare("ur_description"), "config", ur_type, "default_kinematics.yaml"]
+                [FindPackageShare("ur_description"), "config", "ur5e", "default_kinematics.yaml"]
             ),
             description="Path to kinematics calibration YAML for the UR model.",
         )
