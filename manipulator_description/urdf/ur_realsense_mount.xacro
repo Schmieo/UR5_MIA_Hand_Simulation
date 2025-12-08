@@ -3,7 +3,7 @@
   <xacro:macro name="ur_realsense_mount" params="parent_link xyz rpy">
 
     <!-- Neuer Link -->
-    <link name="custom_tool">
+    <link name="ur_realsense_mount_link">
       <visual>
         <origin xyz="${xyz}" rpy="${rpy}"/>
         <geometry>
@@ -28,9 +28,9 @@
     </link>
 
     <!-- Fixed Joint -->
-    <joint name="custom_tool_joint" type="fixed">
+    <joint name="ur_realsense_mount_joint" type="fixed">
       <parent link="${parent_link}"/>
-      <child  link="custom_tool"/>
+      <child  link="ur_realsense_mount_link"/>
       <origin xyz="${xyz}" rpy="${rpy}"/>
     </joint>
 

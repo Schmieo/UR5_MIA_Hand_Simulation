@@ -97,7 +97,7 @@
   <xacro:mia_hand
     laterality="$(arg laterality)"
     joint_limits_config_file="$(arg joint_limits_config_file)"
-    parent="tool0"
+    parent="ur_realsense_mount_link"
     prefix="$(arg prefix)">
     <xacro:if value="${'right' == '$(arg laterality)'}">
       <origin xyz="0 0 0" rpy="1.59 0 0"/>

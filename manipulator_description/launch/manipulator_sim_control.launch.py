@@ -68,7 +68,7 @@ def launch_setup(context, *args, **kwargs):
     initial_joint_controller = LaunchConfiguration("initial_joint_controller")
 
     launch_rviz = LaunchConfiguration("launch_rviz")
-    # rviz_config_file = LaunchConfiguration("rviz_config_file")
+    rviz_config_file = LaunchConfiguration("rviz_config_file")
     gazebo_gui = LaunchConfiguration("gazebo_gui")
     world_file = LaunchConfiguration("world_file")
     # MIA Hand launch Arguments
@@ -150,14 +150,14 @@ def launch_setup(context, *args, **kwargs):
         output="both",
     )
 
-    # rviz_node = Node(
-    #     package="rviz2",
-    #     executable="rviz2",
-    #     name="rviz2",
-    #     output="log",
-    #     arguments=["-d", rviz_config_file],
-    #     condition=IfCondition(launch_rviz),
-    # )
+    rviz_node = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="log",
+        arguments=["-d", rviz_config_file],
+        condition=IfCondition(launch_rviz),
+    )
 
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
@@ -318,7 +318,7 @@ def launch_setup(context, *args, **kwargs):
         delay_spawners_after_gz_spawn,
         initial_joint_controller_spawner_stopped,
         initial_joint_controller_spawner_started,
-        # rviz_node,
+        rviz_node,
         gz_sim_bridge,
     ]
 
@@ -412,15 +412,15 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?")
     )
-    # declared_arguments.append(
-    #     DeclareLaunchArgument(
-    #         "rviz_config_file",
-    #         default_value=PathJoinSubstitution(
-    #             [FindPackageShare("ur_description"), "rviz", "view_robot.rviz"]
-    #         ),
-    #         description="Rviz config file (absolute path) to use when launching rviz.",
-    #     )
-    # )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "rviz_config_file",
+            default_value=PathJoinSubstitution(
+                [FindPackageShare("ur_description"), "rviz", "view_robot.rviz"]
+            ),
+            description="Rviz config file (absolute path) to use when launching rviz.",
+        )
+    )
     declared_arguments.append(
         DeclareLaunchArgument(
             "gazebo_gui", default_value="true", description="Start gazebo with GUI?"
