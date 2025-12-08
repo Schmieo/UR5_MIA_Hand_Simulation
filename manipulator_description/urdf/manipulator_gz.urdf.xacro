@@ -153,7 +153,7 @@
 
   <!-- ros2 control instance -->
   <xacro:ur_ros2_control
-    name="$(arg name)"
+    name="$(arg ur_type)"
     tf_prefix="$(arg tf_prefix)"
     transmission_hw_interface="$(arg transmission_hw_interface)"
   />

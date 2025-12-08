@@ -85,16 +85,16 @@ def generate_launch_description():
                     "launch_rviz": launch_rviz,
                     # "rviz_config_file": PathJoinSubstitution(
                     #     [
-                    #         FindPackageShare("ur5_mia_moveit_config"),
+                    #         FindPackageShare("manipulator_moveit_config"),
                     #         "rviz",
                     #         "moveit.rviz",
                     #     ]
                     # ),
                     "description_launchfile": PathJoinSubstitution(
                         [
-                            FindPackageShare("ur_simulation_gz"),
+                            FindPackageShare("manpulator_description"),
                             "launch",
-                            "ur_mia.launch.py",
+                            "manipulator_control.launch.py",
                         ]
                     ),
                 }.items(),

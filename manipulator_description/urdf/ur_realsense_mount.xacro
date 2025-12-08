@@ -7,14 +7,14 @@
       <visual>
         <origin xyz="${xyz}" rpy="${rpy}"/>
         <geometry>
-          <mesh filename="$(find ur_simulation_gz)/meshes/halterung_realsense.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://manipulator_description/meshes/halterung_realsense.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </visual>
 
       <collision>
         <origin xyz="${xyz}" rpy="${rpy}"/>
         <geometry>
-          <mesh filename="$(find ur_simulation_gz)/meshes/halterung_realsense.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://manipulator_description/meshes/halterung_realsense.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
