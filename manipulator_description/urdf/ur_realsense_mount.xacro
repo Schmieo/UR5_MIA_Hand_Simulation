@@ -9,6 +9,7 @@
         <geometry>
           <mesh filename="package://manipulator_description/meshes/halterung_realsense.stl" scale="0.001 0.001 0.001"/>
         </geometry>
+        <material name="MYBLACK"/>
       </visual>
 
       <collision>
@@ -33,6 +34,10 @@
       <child  link="ur_realsense_mount_link"/>
       <origin xyz="${xyz}" rpy="${rpy}"/>
     </joint>
+
+    <material name="MYBLACK">
+		  <color rgba="0.01568627450980392 0.01568627450980392 0.01568627450980392 1.0"/>
+	  </material>
 
   </xacro:macro>
 
