@@ -64,6 +64,24 @@ def launch_setup(context, *args, **kwargs):
         }.items(),
     )
 
+    ur_driver_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution(
+                    [
+                        FindPackageShare("ur_robot_driver"),
+                        "launch",
+                        "ur_control.launch.py",
+                    ]
+            )
+        ),
+        aunch_arguments={
+            "ur_type": ur_type,
+            "robot_ip": robot_ip,
+            "safety_limits": safety_limits,
+            "launch_rviz": "false",
+        }.items(),
+    ),
+
     # Launch MoveIt and RViz
     manipulator_moveit_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
