@@ -17,6 +17,9 @@
   <!-- import Realsense Mount macro -->
   <xacro:include filename="$(find manipulator_description)/urdf/ur_realsense_mount.xacro"/>
 
+  <!-- import Scene Objects macro -->
+  <xacro:include filename="$(find manipulator_description)/urdf/schrankregal.xacro"/>
+
   <!-- ur5 parameters -->
   <!-- possible 'ur_type' values: ur3, ur3e, ur5, ur5e, ur7e, ur10, ur10e, ur12e, ur16e, ur15, ur20, ur30 -->
   <!-- the default value should raise an error in case this was called without defining the type -->
@@ -76,6 +79,13 @@
     <child link="ground_plane"/>
   </joint>
 
+    <!-- scene -->
+  <xacro:schrankregal
+    parent_link="world"
+    xyz="-0.42 0.42 0"
+    rpy="1.571 0 -0.960">
+  </xacro:schrankregal>
+
   <!-- arm -->
   <xacro:ur_robot
     parent="world"
@@ -105,7 +115,7 @@
     parent="tool0"
     prefix="$(arg prefix)">
     <xacro:if value="${'right' == '$(arg laterality)'}">
-      <origin xyz="0 0 0" rpy="1.59 0 0"/>
+      <origin xyz="0 0 0" rpy="1.59 0 1.59"/>
     </xacro:if>
     <xacro:if value="${'left' == '$(arg laterality)'}">
       <origin xyz="0 0 0" rpy="1.57 3.14 0.1"/>
@@ -120,6 +130,16 @@
       add_plug="false"
       use_mesh="true">
     <origin xyz="0 0 1.30" rpy="0 1 1"/>
+  </xacro:sensor_d435>
+
+    <!-- RealSense D435 Camera Tool-->
+  <xacro:sensor_d435
+      name="camera_tool"
+      parent="tool0"
+      use_nominal_extrinsics="false"
+      add_plug="false"
+      use_mesh="true">
+    <origin xyz="0 0.135 0.012" rpy="0 -1.57 1.57"/>
   </xacro:sensor_d435>
 
   <!-- ros2 control instance -->
