@@ -79,10 +79,27 @@
     <child link="ground_plane"/>
   </joint>
 
-    <!-- scene -->
+  <!-- scene -->
   <xacro:schrankregal
+    name="unten"
     parent_link="world"
     xyz="-0.42 0.42 0"
+    rpy="1.571 0 -0.960">
+  </xacro:schrankregal>
+
+  <!-- scene -->
+  <xacro:schrankregal
+    name="mitte"
+    parent_link="world"
+    xyz="-0.42 0.42 0.46"
+    rpy="1.571 0 -0.960">
+  </xacro:schrankregal>
+
+  <!-- scene -->
+  <xacro:schrankregal
+    name="oben"
+    parent_link="world"
+    xyz="-0.42 0.42 0.92"
     rpy="1.571 0 -0.960">
   </xacro:schrankregal>
 
