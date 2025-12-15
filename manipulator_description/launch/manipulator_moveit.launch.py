@@ -40,7 +40,6 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def launch_setup(context, *args, **kwargs):
-
     ur_type = LaunchConfiguration("ur_type")
     safety_limits = LaunchConfiguration("safety_limits")
 
@@ -64,23 +63,25 @@ def launch_setup(context, *args, **kwargs):
         }.items(),
     )
 
-    ur_driver_launch = IncludeLaunchDescription(
+    ur_robot_driver_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            PathJoinSubstitution(
+            [
+                PathJoinSubstitution(
                     [
                         FindPackageShare("ur_robot_driver"),
                         "launch",
                         "ur_control.launch.py",
                     ]
-            )
+                )
+            ]
         ),
-        aunch_arguments={
+        launch_arguments={
             "ur_type": ur_type,
             "robot_ip": robot_ip,
             "safety_limits": safety_limits,
             "launch_rviz": "false",
         }.items(),
-    ),
+    )
 
     # Launch MoveIt and RViz
     manipulator_moveit_launch = IncludeLaunchDescription(
@@ -96,13 +97,14 @@ def launch_setup(context, *args, **kwargs):
         launch_arguments={
             "ur_type": ur_type,
             "use_sim_time": "false",
-            "launch_rviz": "true",
+            "launch_rviz": "false",
         }.items(),
     )
 
     nodes_to_launch = [
         manipulator_control_launch,
         manipulator_moveit_launch,
+        ur_robot_driver_launch,
     ]
 
     return nodes_to_launch

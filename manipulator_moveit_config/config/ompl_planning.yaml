@@ -12,3 +12,16 @@ response_adapters:
   - default_planning_response_adapters/DisplayMotionPath
 
 start_state_max_bounds_error: 0.01
+
+planner_configs:
+  RRTstarkConfigDefault:
+    type: geometric::RRTstar
+    optimization_objective: PathLengthOptimizationObjective
+    range: 0.1
+    goal_bias: 0.05
+    delay_collision_checking: 1
+
+ur_manipulator:   # <-- Name deiner Planning Group anpassen
+  default_planner_config: RRTstarkConfigDefault
+  planner_configs:
+    - RRTstarkConfigDefault

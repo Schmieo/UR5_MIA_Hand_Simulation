@@ -50,7 +50,7 @@
   <xacro:arg name="laterality" default="right" />
   <xacro:arg name="joint_limits_config_file" default="joint_limits_default.yaml"/>
   <xacro:arg name="prefix" default=""/>
-  <xacro:arg name="mia_use_mock_hardware" default="true"/>
+  <xacro:arg name="mia_use_mock_hardware" default="false"/>
 
   <!-- create link fixed to the "world" -->
   <link name="world" />

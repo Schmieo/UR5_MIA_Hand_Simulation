@@ -1,9 +1,8 @@
-
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import (
     Command,
     FindExecutable,
@@ -11,8 +10,8 @@ from launch.substitutions import (
     PathJoinSubstitution,
 )
 
-def launch_setup(context, *args, **kwargs):
 
+def launch_setup(context, *args, **kwargs):
     ur_type = LaunchConfiguration("ur_type")
     safety_limits = LaunchConfiguration("safety_limits")
     robot_ip = LaunchConfiguration("robot_ip")
@@ -110,7 +109,12 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "kinematics_params",
             default_value=PathJoinSubstitution(
-                [FindPackageShare("ur_description"), "config", "ur5e", "default_kinematics.yaml"]
+                [
+                    FindPackageShare("ur_description"),
+                    "config",
+                    "ur5e",
+                    "default_kinematics.yaml",
+                ]
             ),
             description="Path to kinematics calibration YAML for the UR model.",
         )
@@ -148,10 +152,16 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "description_file",
             default_value=PathJoinSubstitution(
-                [FindPackageShare("manipulator_description"), "urdf", "manipulator.urdf.xacro"]
+                [
+                    FindPackageShare("manipulator_description"),
+                    "urdf",
+                    "manipulator.urdf.xacro",
+                ]
             ),
             description="URDF/XACRO description file (absolute path) with the robot.",
         )
     )
 
-    return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])
+    return LaunchDescription(
+        declared_arguments + [OpaqueFunction(function=launch_setup)]
+    )
