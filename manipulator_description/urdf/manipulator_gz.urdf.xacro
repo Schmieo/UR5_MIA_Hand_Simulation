@@ -9,7 +9,7 @@
   <!-- import Mia Hand macro -->
   <xacro:include filename="$(find mia_hand_description)/urdf/mia_hand.urdf.xacro"/>
   <!-- import Mia Hand ROS2 control macro -->
-  <xacro:include filename="$(find mia_hand_description)/urdf/mia_hand.ros2_control.xacro"/>
+  <xacro:include filename="$(find manipulator_description)/urdf/mia_hand.ros2_control.xacro"/>
 
   <!-- import Camera macro -->
   <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro"/>
@@ -146,7 +146,7 @@
 
   <!-- RealSense D435 Camera Tool-->
   <xacro:sensor_d435
-      name="camera"
+      name="camera_tool"
       parent="tool0"
       use_nominal_extrinsics="false"
       add_plug="false"
