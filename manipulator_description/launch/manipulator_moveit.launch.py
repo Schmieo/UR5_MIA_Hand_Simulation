@@ -97,7 +97,7 @@ def launch_setup(context, *args, **kwargs):
         launch_arguments={
             "ur_type": ur_type,
             "use_sim_time": "false",
-            "launch_rviz": "false",
+            "launch_rviz_moveit": "true",
         }.items(),
     )
 

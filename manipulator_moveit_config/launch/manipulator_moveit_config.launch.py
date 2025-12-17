@@ -65,7 +65,7 @@ def declare_arguments():
     return LaunchDescription(
         [
             DeclareLaunchArgument(
-                "launch_rviz", default_value="true", description="Launch RViz?"
+                "launch_rviz_moveit", default_value="true", description="Launch RViz?"
             ),
             DeclareLaunchArgument(
                 "ur_type",
@@ -112,7 +112,7 @@ def declare_arguments():
 
 def generate_launch_description():
     ur_type = LaunchConfiguration("ur_type")
-    launch_rviz = LaunchConfiguration("launch_rviz")
+    launch_rviz = LaunchConfiguration("launch_rviz_moveit")
 
     warehouse_sqlite_path = LaunchConfiguration("warehouse_sqlite_path")
     launch_servo = LaunchConfiguration("launch_servo")
@@ -130,7 +130,7 @@ def generate_launch_description():
         )
         .sensors_3d(file_path=Path("config") / "sensor3D.yaml")
         .planning_pipelines(
-            pipelines=["ompl", "pilz_industrial_motion_planner", "chomp"],
+            pipelines=["ompl"],
             default_planning_pipeline="ompl",
         )
         .to_moveit_configs()
