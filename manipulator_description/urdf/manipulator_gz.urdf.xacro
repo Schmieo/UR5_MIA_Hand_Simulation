@@ -135,24 +135,24 @@
   </xacro:mia_hand>
 
    <!-- RealSense D435 Camera -->
-  <!-- <xacro:sensor_d435
-      name="camera_base"
+  <xacro:sensor_d435
+      name="camera"
       parent="base_link"
       use_nominal_extrinsics="false"
       add_plug="false"
       use_mesh="true">
-    <origin xyz="0 0 1.30" rpy="0 1 1"/>
-  </xacro:sensor_d435> -->
+    <origin xyz="0.35 -0.35 0.57" rpy="0 0 2.35619"/>
+  </xacro:sensor_d435>
 
   <!-- RealSense D435 Camera Tool-->
-  <xacro:sensor_d435
-      name="camera_tool"
+  <!-- <xacro:sensor_d435
+      name="camera"
       parent="tool0"
       use_nominal_extrinsics="false"
       add_plug="false"
       use_mesh="true">
     <origin xyz="0 0.135 0.012" rpy="0 -1.57 1.57"/>
-  </xacro:sensor_d435>
+  </xacro:sensor_d435> -->
 
   <!-- Gazebo specific elements -->
   <gazebo reference="world"></gazebo>

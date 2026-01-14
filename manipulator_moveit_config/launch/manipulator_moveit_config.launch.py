@@ -139,8 +139,15 @@ def generate_launch_description():
     # octomap_resolution: 5 cm Voxel
     octomap_config = {
         "octomap_frame": "base_link",
-        "octomap_resolution": 0.05,
-        "max_range": 3.0,
+        "octomap_resolution": 0.08,
+        "max_range": 2.0,
+    }
+
+    planning_scene_monitor_parameters = {
+        "publish_planning_scene": True,
+        "publish_geometry_updates": True,
+        "publish_state_updates": True,
+        "publish_transforms_updates": True,
     }
 
     warehouse_ros_config = {
@@ -165,14 +172,19 @@ def generate_launch_description():
         parameters=[
             moveit_config.to_dict(),
             warehouse_ros_config,
+            planning_scene_monitor_parameters,
             {
                 "use_sim_time": use_sim_time,
                 "publish_robot_description_semantic": publish_robot_description_semantic,
+                "robot_description_planning": {
+                    "shape_transform_cache_lookup_wait_time": 1.0
+                }
             },
             octomap_config,
         ],
         arguments=["--ros-args", "--log-level", "error"],
     )
+
 
     servo_yaml = load_yaml("manipulator_moveit_config", "config/ur_servo.yaml")
     servo_params = {"moveit_servo": servo_yaml}
