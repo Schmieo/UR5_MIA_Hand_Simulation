@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>ur_moveit_config</name>
-  <version>4.5.0</version>
+  <name>manipulator_ur_moveit_config</name>
+  <version>3.7.0</version>
   <description>
      An example package with MoveIt2 configurations for UR robots.
   </description>
@@ -34,6 +34,8 @@
   <exec_depend>ur_description</exec_depend>
   <exec_depend>warehouse_ros_sqlite</exec_depend>
   <exec_depend>xacro</exec_depend>
+  <exec_depend>manipulator_description</exec_depend>
+  <exec_depend>manipulator_moveit_config</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

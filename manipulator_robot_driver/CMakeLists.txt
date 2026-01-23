@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(ur_robot_driver)
+project(manipulator_robot_driver)
 
 # Default to off as this only works in environments where a new docker container can be started with the appropriate networking, which
 # might not be possible e.g. inside the buildfarm
@@ -29,7 +29,6 @@ find_package(geometry_msgs REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
@@ -38,53 +37,47 @@ find_package(tf2_geometry_msgs REQUIRED)
 find_package(ur_client_library REQUIRED)
 find_package(ur_dashboard_msgs REQUIRED)
 find_package(ur_msgs REQUIRED)
-find_package(motion_primitives_controllers REQUIRED)
-find_package(control_msgs REQUIRED)
 
 include_directories(include)
+
+set(THIS_PACKAGE_INCLUDE_DEPENDS
+  controller_manager
+  controller_manager_msgs
+  geometry_msgs
+  hardware_interface
+  pluginlib
+  rclcpp
+  rclcpp_lifecycle
+  std_msgs
+  std_srvs
+  tf2_geometry_msgs
+  ur_client_library
+  ur_dashboard_msgs
+  ur_msgs
+)
 
 add_library(ur_robot_driver_plugin
   SHARED
   src/dashboard_client_ros.cpp
   src/hardware_interface.cpp
   src/urcl_log_handler.cpp
+  src/robot_state_helper.cpp
 )
-target_link_libraries(ur_robot_driver_plugin PUBLIC
-  ${controller_manager_msgs_TARGETS}
-  ${geometry_msgs_TARGETS}
-  ${std_msgs_TARGETS}
-  ${std_srvs_TARGETS}
-  ${tf2_geometry_msgs_TARGETS}
-  ${ur_dashboard_msgs_TARGETS}
-  ${ur_msgs_TARGETS}
-  ${control_msgs_TARGETS}
-  controller_manager::controller_manager
-  hardware_interface::hardware_interface
-  pluginlib::pluginlib
-  rclcpp::rclcpp
-  rclcpp_lifecycle::rclcpp_lifecycle
+target_link_libraries(
+  ur_robot_driver_plugin
   ur_client_library::urcl
-  motion_primitives_controllers::motion_primitives_controllers
 )
 target_include_directories(
   ur_robot_driver_plugin
   PRIVATE
   include
 )
+ament_target_dependencies(
+  ur_robot_driver_plugin
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${THIS_PACKAGE_INCLUDE_DEPENDS}
+)
 pluginlib_export_plugin_description_file(hardware_interface hardware_interface_plugin.xml)
-
-add_library(ur_robot_driver_log_handler
-  SHARED
-  src/urcl_log_handler.cpp
-)
-target_include_directories(ur_robot_driver_log_handler
-  PUBLIC
-  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-  "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
-target_link_libraries(ur_robot_driver_log_handler PUBLIC
-  rclcpp::rclcpp
-  ur_client_library::urcl
-)
 
 #
 # dashboard_client
@@ -94,12 +87,8 @@ add_executable(dashboard_client
   src/dashboard_client_node.cpp
   src/urcl_log_handler.cpp
 )
-target_link_libraries(dashboard_client PRIVATE
-  ${std_srvs_TARGETS}
-  ${ur_dashboard_msgs_TARGETS}
-  rclcpp::rclcpp
-  ur_client_library::urcl
-)
+target_link_libraries(dashboard_client ur_client_library::urcl)
+ament_target_dependencies(dashboard_client ${${PROJECT_NAME}_EXPORTED_TARGETS} ${THIS_PACKAGE_INCLUDE_DEPENDS})
 
 #
 # controller_stopper_node
@@ -108,12 +97,7 @@ add_executable(controller_stopper_node
   src/controller_stopper.cpp
   src/controller_stopper_node.cpp
 )
-target_link_libraries(controller_stopper_node PRIVATE
-  ${std_msgs_TARGETS}
-  ${controller_manager_msgs_TARGETS}
-  rclcpp::rclcpp
-  ur_client_library::urcl
-)
+ament_target_dependencies(controller_stopper_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${THIS_PACKAGE_INCLUDE_DEPENDS})
 
 #
 # robot_state_helper
@@ -123,23 +107,13 @@ add_executable(robot_state_helper
   src/robot_state_helper_node.cpp
   src/urcl_log_handler.cpp
 )
-target_link_libraries(robot_state_helper PUBLIC
-  ${std_msgs_TARGETS}
-  ${std_srvs_TARGETS}
-  ${ur_dashboard_msgs_TARGETS}
-  rclcpp::rclcpp
-  rclcpp_action::rclcpp_action
-  ur_client_library::urcl
-)
+target_link_libraries(robot_state_helper ur_client_library::urcl)
+ament_target_dependencies(robot_state_helper ${${PROJECT_NAME}_EXPORTED_TARGETS} ${THIS_PACKAGE_INCLUDE_DEPENDS})
 
 add_executable(urscript_interface
   src/urscript_interface.cpp
 )
-target_link_libraries(urscript_interface PUBLIC
-  rclcpp::rclcpp
-  ${std_msgs_TARGETS}
-  ur_client_library::urcl
-)
+ament_target_dependencies(urscript_interface ${${PROJECT_NAME}_EXPORTED_TARGETS} ${THIS_PACKAGE_INCLUDE_DEPENDS})
 
 #
 # trajectory_until_node
@@ -166,15 +140,12 @@ install(
 
 # INSTALL
 install(
-  TARGETS
-    ur_robot_driver_log_handler
-    ur_robot_driver_plugin
-  EXPORT export_${PROJECT_NAME}
+  TARGETS ur_robot_driver_plugin
   DESTINATION lib
 )
 install(
   DIRECTORY include/
-  DESTINATION include/${PROJECT_NAME}
+  DESTINATION include
 )
 
 ## EXPORTS
@@ -182,11 +153,8 @@ ament_export_include_directories(
   include
 )
 ament_export_libraries(
-  ur_robot_driver_log_handler
   ur_robot_driver_plugin
 )
-# Export modern CMake targets
-ament_export_targets(export_${PROJECT_NAME})
 
 install(DIRECTORY resources
   DESTINATION share/${PROJECT_NAME}
@@ -194,20 +162,16 @@ install(DIRECTORY resources
 )
 
 
+install(DIRECTORY include/
+  DESTINATION include
+)
+
 ament_export_dependencies(
   hardware_interface
   pluginlib
   rclcpp
   rclcpp_lifecycle
-  controller_manager
-  controller_manager_msgs
-  geometry_msgs
-  std_msgs
-  std_srvs
-  tf2_geometry_msgs
-  ur_client_library
-  ur_dashboard_msgs
-  ur_msgs
+  ${THIS_PACKAGE_INCLUDE_DEPENDS}
 )
 
 # Install Python execs
@@ -221,7 +185,6 @@ install(PROGRAMS
   scripts/start_ursim.sh
   examples/examples.py
   examples/force_mode.py
-  examples/send_dummy_motion_primitives_ur10e.py
   examples/move_until_example.py
   DESTINATION lib/${PROJECT_NAME}
 )

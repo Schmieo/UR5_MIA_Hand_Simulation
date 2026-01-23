@@ -162,18 +162,18 @@
   </xacro:mia_hand>
 
    <!-- RealSense D435 Camera -->
-  <!-- <xacro:sensor_d435
-      name="camera"
+  <xacro:sensor_d435
+      name="camera_tower"
       parent="base_link"
       use_nominal_extrinsics="false"
       add_plug="false"
       use_mesh="true">
     <origin xyz="0 0 1.30" rpy="0 1 1"/>
-  </xacro:sensor_d435> -->
+  </xacro:sensor_d435>
 
     <!-- RealSense D435 Camera Tool-->
   <xacro:sensor_d435
-      name="camera_tool"
+      name="camera_gripper"
       parent="tool0"
       use_nominal_extrinsics="false"
       add_plug="false"

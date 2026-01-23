@@ -85,7 +85,11 @@ def launch_setup(context):
         ),
         launch_description_source=AnyLaunchDescriptionSource(
             PathJoinSubstitution(
-                [FindPackageShare("ur_robot_driver"), "launch", "ur_dashboard_client.launch.py"]
+                [
+                    FindPackageShare("ur_robot_driver"),
+                    "launch",
+                    "ur_dashboard_client.launch.py",
+                ]
             )
         ),
         launch_arguments={
@@ -165,11 +169,10 @@ def launch_setup(context):
         executable="trajectory_until_node",
         name="trajectory_until_node",
         output="screen",
-        remappings=[
-            (
-                "/motion_controller/follow_joint_trajectory",
-                f"/{initial_joint_controller.perform(context)}/follow_joint_trajectory",
-            ),
+        parameters=[
+            {
+                "motion_controller": initial_joint_controller,
+            },
         ],
     )
 
@@ -207,7 +210,6 @@ def launch_setup(context):
         "passthrough_trajectory_controller",
         "freedrive_mode_controller",
         "tool_contact_controller",
-        "motion_primitive_forward_controller",
     ]
     if activate_joint_controller.perform(context) == "true":
         controllers_active.append(initial_joint_controller.perform(context))
@@ -309,7 +311,11 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "description_launchfile",
             default_value=PathJoinSubstitution(
-                [FindPackageShare("ur_robot_driver"), "launch", "ur_rsp.launch.py"]
+                [
+                    FindPackageShare("manipulator_robot_driver"),
+                    "launch",
+                    "ur_rsp.launch.py",
+                ]
             ),
             description="Launchfile (absolute path) providing the description. "
             "The launchfile has to start a robot_state_publisher node that "
@@ -365,7 +371,6 @@ def generate_launch_description():
                 "forward_position_controller",
                 "freedrive_mode_controller",
                 "passthrough_trajectory_controller",
-                "motion_primitive_forward_controller",
             ],
             description="Initially loaded robot controller.",
         )
@@ -378,7 +383,9 @@ def generate_launch_description():
         )
     )
     declared_arguments.append(
-        DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?")
+        DeclareLaunchArgument(
+            "launch_rviz", default_value="true", description="Launch RViz?"
+        )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
@@ -518,4 +525,6 @@ def generate_launch_description():
             ],
         )
     )
-    return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])
+    return LaunchDescription(
+        declared_arguments + [OpaqueFunction(function=launch_setup)]
+    )

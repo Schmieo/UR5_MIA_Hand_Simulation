@@ -23,4 +23,3 @@ ur_robot_driver
    robot_state_helper
    controller_stopper
    trajectory_until_node
-   migration_notes
