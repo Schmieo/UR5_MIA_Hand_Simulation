@@ -2,7 +2,11 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, OpaqueFunction, IncludeLaunchDescription
+from launch.actions import (
+    DeclareLaunchArgument,
+    OpaqueFunction,
+    IncludeLaunchDescription,
+)
 from launch.substitutions import (
     Command,
     FindExecutable,
@@ -25,13 +29,16 @@ def launch_setup(context, *args, **kwargs):
     mock_sensor_commands = LaunchConfiguration("mock_sensor_commands")
     initial_joint_controller = LaunchConfiguration("initial_joint_controller")
     activate_joint_controller = LaunchConfiguration("activate_joint_controller")
-
-    mia_use_mock_hardware = LaunchConfiguration("mia_use_mock_hardware")
+    serial_port_arg = LaunchConfiguration("serial_port_arg")
 
     manipulator_driver_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution(
-                [FindPackageShare("manipulator_robot_driver"), "launch", "ur5e.launch.py"]
+                [
+                    FindPackageShare("manipulator_robot_driver"),
+                    "launch",
+                    "ur5e.launch.py",
+                ]
             )
         ),
         launch_arguments={
@@ -46,7 +53,11 @@ def launch_setup(context, *args, **kwargs):
     manipulator_moveit_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution(
-                [FindPackageShare("manipulator_ur_moveit_config"), "launch", "ur_moveit.launch.py"]
+                [
+                    FindPackageShare("manipulator_ur_moveit_config"),
+                    "launch",
+                    "ur_moveit.launch.py",
+                ]
             )
         ),
         launch_arguments={
@@ -57,9 +68,25 @@ def launch_setup(context, *args, **kwargs):
         }.items(),
     )
 
+    mia_hand_driver_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("mia_hand_driver"),
+                    "launch",
+                    "mia_hand_driver_launch.py",
+                ]
+            )
+        ),
+        launch_arguments={
+            "serial_port": serial_port_arg,
+        }.items(),
+    )
+
     return [
         manipulator_driver_launch,
         manipulator_moveit_launch,
+        mia_hand_driver_launch,
     ]
 
 
@@ -161,12 +188,11 @@ def generate_launch_description():
             description="Activate loaded joint controller.",
         )
     )
-
     declared_arguments.append(
         DeclareLaunchArgument(
-            "mia_use_mock_hardware",
-            default_value="true",
-            description="Start MIA Hand ros2_control as mock hardware. Set false only if you have the real hand connected.",
+            "serial_port_arg",
+            default_value="/dev/ttyUSB0",
+            description="Mia Hand serial port device.",
         )
     )
 
