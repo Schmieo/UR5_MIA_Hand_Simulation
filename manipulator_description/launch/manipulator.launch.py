@@ -25,7 +25,7 @@ def launch_setup(context, *args, **kwargs):
         "publish_robot_description_semantic"
     )
     robot_ip = LaunchConfiguration("robot_ip")
-    se_mock_hardware = LaunchConfiguration("use_mock_hardware")
+    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
     mock_sensor_commands = LaunchConfiguration("mock_sensor_commands")
     initial_joint_controller = LaunchConfiguration("initial_joint_controller")
     activate_joint_controller = LaunchConfiguration("activate_joint_controller")
@@ -43,7 +43,7 @@ def launch_setup(context, *args, **kwargs):
         ),
         launch_arguments={
             "robot_ip": robot_ip,
-            "use_mock_hardware": se_mock_hardware,
+            "use_mock_hardware": use_mock_hardware,
             "mock_sensor_commands": mock_sensor_commands,
             "initial_joint_controller": initial_joint_controller,
             "activate_joint_controller": activate_joint_controller,
